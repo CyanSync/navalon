@@ -1,24 +1,26 @@
-import { gql } from 'graphql-tag';
-import { useQuery } from '@apollo/client';
-import { DangerousChangeType } from 'graphql';
+import { useQuery } from "@apollo/client";
+import { DangerousChangeType } from "graphql";
+import { gql } from "graphql-tag";
 
-import { graphql } from "./__generated__"
+import { graphql } from "./__generated__";
 
-const GET_BOOKS = graphql(`#graphql
+const GET_BOOKS = graphql(`
+  #graphql
   query Books {
     books {
-			title
-			author
+      title
+      author
     }
   }
-`)
+`);
 
 function Dogs() {
-	const { data, error } = useQuery(GET_BOOKS)
+  const { data, error } = useQuery(GET_BOOKS);
 
-	if (loading || error) {
-		return <div>Loading</div>;
-	}
-	return <div> {data.books[0].title} </div>
+  if (error) {
+    return <div>Loading</div>;
+  }
+  return <div> {data.books[0].title} </div>;
 }
 
+export { Dogs };
