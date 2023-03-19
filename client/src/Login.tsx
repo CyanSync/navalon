@@ -94,16 +94,18 @@ function Login() {
 
   return (
     <View style={styles.container}>
-      <Button title="Open Hosted UI" onPress={() => Auth.federatedSignIn()} />
-      <Button
-        title="Open Google"
-        onPress={() =>
-          Auth.federatedSignIn({
-            provider: CognitoHostedUIIdentityProvider.Google,
-          })
-        }
-      />
-      <Button title="Sign Out" onPress={() => Auth.signOut()} />
+      {user === null ? (
+        <Button
+          title="Sign In with Google"
+          onPress={() =>
+            Auth.federatedSignIn({
+              provider: CognitoHostedUIIdentityProvider.Google,
+            })
+          }
+        />
+      ) : (
+        <Button title="Sign Out" onPress={() => Auth.signOut()} />
+      )}
       <Text>{user && user.getUsername()}</Text>
       <Text>{appLink}</Text>
       <StatusBar style="auto" />
