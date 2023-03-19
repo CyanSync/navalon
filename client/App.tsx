@@ -1,14 +1,9 @@
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  gql,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider, gql } from "@apollo/client";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import { Login } from "./src/Login";
-import { Dogs } from "./src/dogs";
+import { GameSelectorView } from "./src/components/GameSelectorView";
 
 // Initialize Apollo Client
 const client = new ApolloClient({
@@ -21,6 +16,7 @@ export default function App() {
     <ApolloProvider client={client}>
       <View style={styles.container}>
         <Login />
+        <GameSelectorView />
       </View>
     </ApolloProvider>
   );

@@ -10,8 +10,7 @@ import awsConfig from "./aws-exports";
 
 const isLocalHost = Boolean(__DEV__);
 
-const [localRedirectSignIn, productionRedirectSignIn] =
-  awsConfig.oauth.redirectSignIn.split(",");
+const [localRedirectSignIn, productionRedirectSignIn] = awsConfig.oauth.redirectSignIn.split(",");
 
 const [localRedirectSignOut, productionRedirectSignOut] =
   awsConfig.oauth.redirectSignOut.split(",");
@@ -33,10 +32,7 @@ async function urlOpener(url, redirectUrl) {
   }
 
   //@ts-ignore URL is actually there for when we're using it
-  const { type, url: newUrl } = await WebBrowser.openAuthSessionAsync(
-    url,
-    redirectUrl
-  );
+  const { type, url: newUrl } = await WebBrowser.openAuthSessionAsync(url, redirectUrl);
 
   if (type === "success") {
     if (Platform.OS === "ios") {
@@ -65,6 +61,7 @@ Amplify.configure(updatedConfig);
 
 function Login() {
   const [user, setUser] = useState(null);
+  const [email, setUserEmail] = useState(null);
   const [customState, setCustomState] = useState(null);
 
   useEffect(() => {
@@ -86,7 +83,14 @@ function Login() {
     });
 
     Auth.currentAuthenticatedUser()
-      .then((currentUser) => setUser(currentUser))
+      .then(async (currentUser) => {
+        setUser(currentUser);
+        const token = (await Auth.userSession(currentUser)).getAccessToken();
+        const info = await Auth.currentUserInfo();
+        setUserEmail(info.email);
+        console.log(info.email);
+        console.log(user);
+      })
       .catch(() => console.log("Not signed in"));
 
     return unsubscribe;
@@ -108,6 +112,7 @@ function Login() {
       )}
       <Text>{user && user.getUsername()}</Text>
       <Text>{appLink}</Text>
+      <Text>{email && email}</Text>
       <StatusBar style="auto" />
     </View>
   );
@@ -117,9 +122,9 @@ export { Login };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    // flex: 1,
+    // backgroundColor: "#fff",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
 });
