@@ -5,5 +5,12 @@
     "eslint": "^8.36.0",
     "eslint-config-universe": "^11.2.0",
     "prettier": "^2.8.4"
+  },
+  "eslintConfig": {
+    "extends": "universe/native",
+    "rules": {
+      "@typescript-eslint/no-unused-vars": "off",
+      "indent": ["error", 2]
+      }
   }
 }

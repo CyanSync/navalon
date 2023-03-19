@@ -7,6 +7,7 @@ import {
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
+import { Login } from "./src/Login";
 import { Dogs } from "./src/dogs";
 
 // Initialize Apollo Client
@@ -19,7 +20,7 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <View style={styles.container}>
-        <Dogs />
+        <Login />
       </View>
     </ApolloProvider>
   );

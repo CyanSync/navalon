@@ -4,15 +4,17 @@ import { gql } from "graphql-tag";
 
 import { graphql } from "./__generated__";
 
-const GET_BOOKS = graphql(`
-  #graphql
-  query Books {
-    books {
-      title
-      author
+const GET_BOOKS = graphql(
+  `
+    #graphql
+    query Books {
+      books {
+        title
+        author
+      }
     }
-  }
-`);
+  `
+);
 
 function Dogs() {
   const { data, error } = useQuery(GET_BOOKS);
