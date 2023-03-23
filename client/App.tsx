@@ -1,13 +1,30 @@
-import { ApolloClient, InMemoryCache, ApolloProvider, gql } from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider, gql, createHttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import { Login } from "./src/Login";
 import { GameSelectorView } from "./src/components/GameSelectorView";
+import { useAuthentication } from "./src/utils/getUserHook";
 
 // Initialize Apollo Client
-const client = new ApolloClient({
+const httpLink = createHttpLink({
   uri: "http://localhost:4000",
+});
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem("token");
+  console.log("token is", token);
+  return {
+    headers: {
+      ...headers,
+      authorization: token ?? "",
+    },
+  };
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
