@@ -5,6 +5,7 @@ import { IncomingMessage, ServerResponse } from "http";
 
 import { Game, GameStatus } from "./entity/Game";
 import { User } from "./entity/User";
+import "reflect-metadata";
 
 const verifier = CognitoJwtVerifier.create({
   userPoolId: "us-east-2_WHIGoYP3n",
@@ -53,6 +54,9 @@ const resolvers = {
   Query: {
     games: (parent: any, args: any, contextValue: Context) => {
       console.log(contextValue.user);
+      if (!contextValue.user) {
+        throw new Error("User is not authenticated");
+      }
       return games;
     },
   },
@@ -71,6 +75,7 @@ async function startServer() {
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
     context: async ({ req, res }: { req: IncomingMessage; res: ServerResponse }) => {
+      console.log("doing context");
       const token = req.headers.authorization || "";
       try {
         console.log(token);

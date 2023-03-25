@@ -3,6 +3,7 @@ import { Auth } from "aws-amplify";
 import React, { useState } from "react";
 import { Text, View, Image } from "react-native";
 
+import { Wrapper } from "./Wrapper";
 import { graphql } from "../__generated__";
 import { useAuthentication, useCurrentUser } from "../utils/getUserHook";
 
@@ -31,7 +32,7 @@ function GameSelectorView({}: object) {
   }
 
   return (
-    <View>
+    <Wrapper>
       {user ? <Image source={{ uri: user.attributes.picture }} /> : null}
       <Text>
         GameSelectorView:
@@ -54,7 +55,7 @@ function GameSelectorView({}: object) {
           </div>
         ))}
       </Text>
-    </View>
+    </Wrapper>
   );
 }
 

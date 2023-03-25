@@ -1,5 +1,7 @@
 import { ApolloClient, InMemoryCache, ApolloProvider, gql, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -28,22 +30,28 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+const Stack = createNativeStackNavigator();
+
 export default function App() {
   return (
     <ApolloProvider client={client}>
-      <View style={styles.container}>
-        <Login />
-        <GameSelectorView />
-      </View>
+      <NavigationContainer>
+        {/* <View style={styles.container}> */}
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="GameSelector" component={GameSelectorView} />
+        </Stack.Navigator>
+        {/* </View> */}
+      </NavigationContainer>
     </ApolloProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    // flex: 1,
+    // backgroundColor: "#fff",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
 });
