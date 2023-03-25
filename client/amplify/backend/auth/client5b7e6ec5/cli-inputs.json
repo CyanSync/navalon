@@ -64,6 +64,6 @@
     },
     "breakCircularDependency": true,
     "dependsOn": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"exp://192.168.1.119:19000/\",\"myapp://\",\"http://localhost:19006/\",\"https://localhost:19006/\"],\"LogoutURLs\":[\"exp://192.168.1.119:19000/\",\"myapp://\",\"http://localhost:19006/\",\"https://localhost:19006/\"]}"
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"exp://192.168.1.119:19000/\",\"myapp://\",\"http://localhost:19006/\",\"https://localhost:19006/\",\"exp://192.168.1.120:19000/\"],\"LogoutURLs\":[\"exp://192.168.1.119:19000/\",\"myapp://\",\"http://localhost:19006/\",\"https://localhost:19006/\",\"exp://192.168.1.120:19000/\"]}"
   }
 }

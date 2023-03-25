@@ -17,7 +17,9 @@ export type Scalars = {
 export type Game = {
   __typename?: 'Game';
   id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
   status?: Maybe<GameStatus>;
+  usersInGame?: Maybe<Array<Maybe<User>>>;
 };
 
 export enum GameStatus {
@@ -31,10 +33,17 @@ export type Query = {
   games?: Maybe<Array<Maybe<Game>>>;
 };
 
+export type User = {
+  __typename?: 'User';
+  email?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+};
+
 export type GamesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GamesQuery = { __typename?: 'Query', games?: Array<{ __typename?: 'Game', id?: string | null, status?: GameStatus | null } | null> | null };
+export type GamesQuery = { __typename?: 'Query', games?: Array<{ __typename?: 'Game', id?: string | null, name?: string | null, status?: GameStatus | null, usersInGame?: Array<{ __typename?: 'User', id?: string | null, name?: string | null } | null> | null } | null> | null };
 
 
-export const GamesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Games"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"games"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]} as unknown as DocumentNode<GamesQuery, GamesQueryVariables>;
+export const GamesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Games"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"games"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"usersInGame"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GamesQuery, GamesQueryVariables>;

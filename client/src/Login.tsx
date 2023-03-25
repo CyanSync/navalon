@@ -36,6 +36,7 @@ async function urlOpener(url, redirectUrl) {
   }
 
   //@ts-ignore URL is actually there for when we're using it
+  console.log("url", url, "redirect", redirectUrl, "app link", appLink);
   const { type, url: newUrl } = await WebBrowser.openAuthSessionAsync(url, redirectUrl);
 
   if (type === "success") {

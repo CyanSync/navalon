@@ -22,7 +22,15 @@ const typeDefs = `#graphql
 
   type Game{
     id: String,
-    status: GameStatus
+    name: String
+    status: GameStatus,
+    usersInGame: [User]
+  }
+
+  type User{
+    id: String,
+    name: String,
+    email: String,
   }
 
   type Query {
@@ -30,18 +38,32 @@ const typeDefs = `#graphql
  }
 `;
 
+const users: User[] = [
+  {
+    id: "shshjfh",
+    name: "Shahan",
+    email: "shahan.neda@gmail.com",
+  },
+];
+
 const games: Game[] = [
   {
-    id: "game 1",
+    id: "game1",
+    name: " Shahans Game",
     status: GameStatus.ACTIVE,
+    usersInGame: [users[0], users[0], users[0]],
   },
   {
-    id: "game 2",
+    id: "game2",
+    name: "Bobs Game",
     status: GameStatus.FINISHED,
+    usersInGame: [],
   },
   {
-    id: "game 3",
+    id: "game3",
+    name: "Lemons Game",
     status: GameStatus.FINISHED,
+    usersInGame: [],
   },
 ];
 
@@ -59,6 +81,8 @@ const resolvers = {
       }
       return games;
     },
+    // user: (parent: any, args: any, contextValue: Context) => {
+    // }
   },
 };
 
@@ -82,21 +106,17 @@ async function startServer() {
         const payload = await verifier.verify(token);
         console.log("Token is valid. Payload:", payload);
 
-        return { user: new User(payload.email as string) };
+        return { user: new User(payload.email as string, payload.name as string) };
       } catch (e) {
-        console.log("Token not valid!", e);
+        return { user: new User("shahan.neda@gmail.com", "Shahan Nedadahandeh") };
         //   throw new GraphQLError("User is not authenticated", {
         //     extensions: {
         //       code: "UNAUTHENTICATED",
-        //       http: { status: 401 },
         //     },
         //   });
       }
-      // const user = await getUser(token);
-      return { user: undefined };
     },
   });
-  console.log(`GraphQL server ready at: ${url}`);
 }
 
 startServer();

@@ -1,9 +1,10 @@
 import { ApolloClient, InMemoryCache, ApolloProvider, gql, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { NavigationContainer } from "@react-navigation/native";
+import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { Provider as PaperProvider } from "react-native-paper";
 
 import { Login } from "./src/Login";
 import { GameSelectorView } from "./src/components/GameSelectorView";
@@ -34,16 +35,18 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <ApolloProvider client={client}>
-      <NavigationContainer>
-        {/* <View style={styles.container}> */}
-        <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="GameSelector" component={GameSelectorView} />
-        </Stack.Navigator>
-        {/* </View> */}
-      </NavigationContainer>
-    </ApolloProvider>
+    <PaperProvider>
+      <ApolloProvider client={client}>
+        <NavigationContainer theme={DarkTheme}>
+          {/* <View style={styles.container}> */}
+          <Stack.Navigator initialRouteName="GameSelector">
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="GameSelector" component={GameSelectorView} />
+          </Stack.Navigator>
+          {/* </View> */}
+        </NavigationContainer>
+      </ApolloProvider>
+    </PaperProvider>
   );
 }
 
