@@ -1,5 +1,6 @@
 type RootStackParamList = {
   Login: undefined;
-  GameSelector: undefined;
+  GameSelectorView: undefined;
+  CreateNewGameView: undefined;
 };
 export { RootStackParamList };

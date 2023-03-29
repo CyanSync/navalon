@@ -7,12 +7,13 @@ import { StyleSheet, Text, View } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
 
 import { Login } from "./src/Login";
-import { GameSelectorView } from "./src/components/GameSelectorView";
+import { CreateNewGameView } from "./src/components/CreateNewGameView";
+import { CreateNewButton, GameSelectorView } from "./src/components/GameSelectorView";
 import { useAuthentication } from "./src/utils/getUserHook";
 
 // Initialize Apollo Client
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000",
+  uri: "http://192.168.1.120:4000",
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -41,7 +42,14 @@ export default function App() {
           {/* <View style={styles.container}> */}
           <Stack.Navigator initialRouteName="GameSelector">
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="GameSelector" component={GameSelectorView} />
+            <Stack.Screen
+              name="GameSelectorView"
+              component={GameSelectorView}
+              options={{
+                headerRight: CreateNewButton,
+              }}
+            />
+            <Stack.Screen name="CreateNewGameView" component={CreateNewGameView} />
           </Stack.Navigator>
           {/* </View> */}
         </NavigationContainer>

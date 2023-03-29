@@ -64,7 +64,7 @@ const updatedConfig = {
 };
 Amplify.configure(updatedConfig);
 
-function Login({ navigation }: NativeStackScreenProps<RootStackParamList, "GameSelector">) {
+function Login({ navigation }: NativeStackScreenProps<RootStackParamList, "Login">) {
   const [user, setUser] = useState(null);
   const [email, setUserEmail] = useState(null);
   const [customState, setCustomState] = useState(null);
@@ -118,7 +118,7 @@ function Login({ navigation }: NativeStackScreenProps<RootStackParamList, "GameS
       ) : (
         <Button title="Sign Out" onPress={() => Auth.signOut()} />
       )}
-      <Button title="Go to next page" onPress={() => navigation.navigate("GameSelector")} />
+      <Button title="Go to next page" onPress={() => navigation.navigate("GameSelectorView")} />
       <Text>{user && user.getUsername()}</Text>
       <Text>{appLink}</Text>
       <Text>{email && email}</Text>

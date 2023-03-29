@@ -1,5 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { GraphQLAPIClass } from "@aws-amplify/api-graphql";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Auth } from "aws-amplify";
 import React, { useState } from "react";
 import { View, Image, StyleSheet, FlatList } from "react-native";
@@ -8,6 +10,7 @@ import { Button, Card, Chip, Text } from "react-native-paper";
 import { Wrapper } from "./Wrapper";
 import { graphql } from "../__generated__";
 import { Game } from "../__generated__/graphql";
+import { RootStackParamList } from "../rootStackParamList";
 import { useAuthentication, useCurrentUser } from "../utils/getUserHook";
 
 const GET_GAMES = graphql(
@@ -52,12 +55,23 @@ function GameBubble({ game }: { game: Game }) {
             <Chip style={{ margin: 3, width: "10", maxWidth: 100 }}>{user.name}</Chip>
           ))}
         </View>
-        <Button mode="contained-tonal" style={{ marginTop: 10 }}>
-          Join
-        </Button>
+        <Button mode="contained-tonal">Join</Button>
       </Card.Content>
     </Card>
   );
 }
 
-export { GameSelectorView };
+function CreateNewButton() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  return (
+    <Button
+      mode="contained-tonal"
+      onPress={() => {
+        navigation.navigate("CreateNewGameView");
+      }}>
+      Create New Game
+    </Button>
+  );
+}
+
+export { GameSelectorView, CreateNewButton };
