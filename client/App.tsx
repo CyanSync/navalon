@@ -40,7 +40,7 @@ export default function App() {
       <ApolloProvider client={client}>
         <NavigationContainer theme={DarkTheme}>
           {/* <View style={styles.container}> */}
-          <Stack.Navigator initialRouteName="GameSelector">
+          <Stack.Navigator initialRouteName="GameSelectorView">
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen
               name="GameSelectorView"

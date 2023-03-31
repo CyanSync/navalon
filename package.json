@@ -9,8 +9,7 @@
   "eslintConfig": {
     "extends": "universe/native",
     "rules": {
-      "@typescript-eslint/no-unused-vars": "off",
-      "indent": ["error", 2]
+      "@typescript-eslint/no-unused-vars": "off"
       }
   }
 }

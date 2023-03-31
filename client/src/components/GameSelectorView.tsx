@@ -5,7 +5,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Auth } from "aws-amplify";
 import React, { useState } from "react";
 import { View, Image, StyleSheet, FlatList } from "react-native";
-import { Button, Card, Chip, Text } from "react-native-paper";
+import { Button, Card, Chip, Text, List } from "react-native-paper";
+import ListItem from "react-native-paper/lib/typescript/src/components/List/ListItem";
 
 import { Wrapper } from "./Wrapper";
 import { graphql } from "../__generated__";
