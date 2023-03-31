@@ -1,16 +1,11 @@
+import { AppDataSource } from "../datasource";
 import { Game, GameStatus } from "../entity/Game";
 import { User } from "../entity/User";
 
-const users: User[] = [
-  {
-    id: "shshjfh",
-    name: "Shahan",
-    email: "shahan.neda@gmail.com",
-  },
-];
-
 class UserService {
-  getUsers() {
+  async getUsers() {
+    const usersRepo = AppDataSource.getRepository(User);
+    const users = await usersRepo.find();
     return users;
   }
 }

@@ -7,6 +7,7 @@ import { Container } from "typedi";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 
+import { AppDataSource } from "./datasource";
 import { Game, GameStatus } from "./entity/Game";
 import { User } from "./entity/User";
 import { GameResolver } from "./resolvers/GameResolver";
@@ -27,6 +28,11 @@ async function startServer() {
     container: Container,
   });
   const server = new ApolloServer<Context>({ schema });
+
+  // to initialize initial connection with the database, register all entities
+  // and "synchronize" database schema, call "initialize()" method of a newly created database
+  // once in your application bootstrap
+  await AppDataSource.initialize();
 
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
