@@ -8,3 +8,11 @@ services:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: dev 
       POSTGRES_DB: navalon 
+  database-explorer:
+    image: 'dpage/pgadmin4:latest'
+    ports:
+      - 8080:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'shahan.neda@gmail.com'
+      PGADMIN_DEFAULT_PASSWORD: 'dev'
+      PGADMIN_DEFAULT_PORT: '5433'

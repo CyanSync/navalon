@@ -1,8 +1,8 @@
 import { Query, Resolver } from "type-graphql";
 import { Service } from "typedi";
 
-import { Game } from "../entity/Game";
-import { GameService } from "../services/GameService";
+import { Game } from "../entity/Game.js";
+import { GameService } from "../services/GameService.js";
 
 @Service()
 @Resolver(Game)

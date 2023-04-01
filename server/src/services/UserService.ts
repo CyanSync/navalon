@@ -1,6 +1,6 @@
-import { AppDataSource } from "../datasource";
-import { Game, GameStatus } from "../entity/Game";
-import { User } from "../entity/User";
+import { AppDataSource } from "../datasource.js";
+import { Game, GameStatus } from "../entity/Game.js";
+import { User } from "../entity/User.js";
 
 class UserService {
   async getUsers() {

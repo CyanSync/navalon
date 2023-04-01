@@ -1,16 +1,23 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
+import { promises as fs } from "fs";
 import { IncomingMessage, ServerResponse } from "http";
-import { Container } from "typedi";
+import { FileMigrationProvider, Kysely, Migrator, PostgresDialect } from "kysely";
+import * as path from "path";
+import pg from "pg";
 
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
+import { Container } from "typedi";
+import { fileURLToPath } from "url";
 
-import { AppDataSource } from "./datasource";
-import { Game, GameStatus } from "./entity/Game";
-import { User } from "./entity/User";
-import { GameResolver } from "./resolvers/GameResolver";
+import { AppDataSource } from "./datasource.js";
+import { UserTable } from "./db/UserTable.js";
+import { Game, GameStatus } from "./entity/Game.js";
+import { User } from "./entity/User.js";
+import { GameResolver } from "./resolvers/GameResolver.js";
+import { DbProvider } from "./services/DbProvider.js";
 
 const verifier = CognitoJwtVerifier.create({
   userPoolId: "us-east-2_WHIGoYP3n",
@@ -29,10 +36,13 @@ async function startServer() {
   });
   const server = new ApolloServer<Context>({ schema });
 
-  // to initialize initial connection with the database, register all entities
-  // and "synchronize" database schema, call "initialize()" method of a newly created database
-  // once in your application bootstrap
-  await AppDataSource.initialize();
+  // const { id } = await db
+  //   .insertInto("user")
+  //   .values({ name: "Shahan", email: "test" })
+  //   .returning("id")
+  //   .executeTakeFirstOrThrow();
+  // await AppDataSource.initialize();
+  await Container.get(DbProvider).runMigrations();
 
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },

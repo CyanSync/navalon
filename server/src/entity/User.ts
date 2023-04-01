@@ -2,8 +2,8 @@ import { IsEmail, MaxLength } from "class-validator";
 import { Field, ID, ObjectType } from "type-graphql";
 import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-import { Game } from "./Game";
-import { GameUser } from "./GameUser";
+import { Game } from "./Game.js";
+import { GameUser } from "./GameUser.js";
 
 @ObjectType()
 @Entity()

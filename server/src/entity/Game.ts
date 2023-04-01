@@ -2,27 +2,27 @@ import { MaxLength } from "class-validator";
 import { Field, ID, ObjectType } from "type-graphql";
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-import { GameUser } from "./GameUser";
-import { User } from "./User";
+import { GameUser } from "./GameUser.js";
+import { User } from "./User.js";
 
 @ObjectType()
-@Entity()
+// @Entity()
 class Game {
   @Field((type) => ID)
-  @PrimaryGeneratedColumn()
+  // @PrimaryGeneratedColumn()
   id: string = "0";
 
   @Field()
-  @MaxLength(30)
-  @Column()
+  // @MaxLength(30)
+  // @Column()
   name: string = "";
 
   @Field()
-  @Column()
+  // @Column()
   status: GameStatus = GameStatus.LOBBY;
 
-  @OneToMany(() => GameUser, (gameUser) => gameUser.game)
-  @JoinTable()
+  // @OneToMany(() => GameUser, (gameUser) => gameUser.game)
+  // @JoinTable()
   gameUsers: GameUser[];
 }
 
