@@ -1,11 +1,11 @@
 import { Generated } from "kysely";
 
+import { GameStatus } from "../entity/Game.js";
+
 interface GameTable {
   id: Generated<number>;
-
-  email: string;
   name: string;
-  status: string;
+  status: GameStatus;
 }
 
 export { GameTable };

@@ -13,6 +13,17 @@ class GameService {
     const games = this.dbProvider.db.selectFrom("games").select(["id", "name"]).execute();
     return games;
   }
+
+  async createGame({ name }: { name: string }): Promise<Game> {
+    const status = GameStatus.ACTIVE;
+    const game = await this.dbProvider.db
+      .insertInto("games")
+      .values({ name, status })
+      .returning(["id", "name", "status"])
+      .executeTakeFirstOrThrow();
+
+    return new Game(game.id.toString(), game.name, status);
+  }
 }
 
 export { GameService };

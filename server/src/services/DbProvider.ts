@@ -48,9 +48,6 @@ class DbProvider {
         migrationFolder: path.join(__dirname, "../migrations"),
       }),
     });
-    // migrator.migrateDown();
-    // migrator.migrateDown();
-    // migrator.migrateDown();
 
     await migrator.migrateToLatest();
 

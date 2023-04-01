@@ -8,21 +8,21 @@ import { User } from "./User.js";
 @ObjectType()
 // @Entity()
 class Game {
+  constructor(id: string, name: string, status: GameStatus) {
+    this.id = id;
+    this.name = name;
+    this.status = status;
+  }
+
   @Field((type) => ID)
-  // @PrimaryGeneratedColumn()
   id: string = "0";
 
   @Field()
-  // @MaxLength(30)
-  // @Column()
   name: string = "";
 
   @Field()
-  // @Column()
   status: GameStatus = GameStatus.LOBBY;
 
-  // @OneToMany(() => GameUser, (gameUser) => gameUser.game)
-  // @JoinTable()
   gameUsers: GameUser[];
 }
 
