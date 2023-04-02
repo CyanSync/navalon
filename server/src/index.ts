@@ -57,6 +57,7 @@ async function startServer() {
         userInfo = { name, email };
       } catch (e) {
         userInfo = { name: "Test User", email: "test@example.com" };
+        console.log("set user to test user");
         // return { user: new User("shahan.neda@gmail.com", "Shahan Nedadahandeh") };
         //   throw new GraphQLError("User is not authenticated", {
         //     extensions: {

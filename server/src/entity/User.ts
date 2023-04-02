@@ -22,9 +22,6 @@ class User {
   // @Column()
   name: string;
 
-  // @OneToMany(() => GameUser, (gameUser) => gameUser.user)
-  userGames: GameUser[];
-
   // @ManyToMany(() => Game, (game) => game.usersInGame)
   // @Column()
   // gamesUserIsIn: Game[];
