@@ -10,7 +10,7 @@ import { GameTable } from "../db/GameTable.js";
 import { GameUserTable } from "../db/GameUserTable.js";
 import { UserTable } from "../db/UserTable.js";
 
-const LOG = true;
+const LOG = false;
 
 interface Database {
   users: UserTable;
@@ -38,19 +38,31 @@ class DbProvider {
 
     this.runMigrations();
   }
-
-  async runMigrations() {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    const db = this.db;
-    const migrator = new Migrator({
-      db,
+  getMigrator() {
+    return new Migrator({
+      db: this.db,
       provider: new FileMigrationProvider({
         fs,
         path,
         migrationFolder: path.join(__dirname, "../migrations"),
       }),
     });
+  }
+  async resetDb() {
+    const migrator = this.getMigrator();
+    (await migrator.getMigrations()).forEach((it) => {
+      migrator.migrateDown();
+    });
+  }
+
+  async runMigrations() {
+    const __dirname = path.dirname(__filename);
+    const db = this.db;
+    const migrator = this.getMigrator();
+
+    migrator.migrateDown();
+    migrator.migrateDown();
+    migrator.migrateDown();
 
     await migrator.migrateToLatest();
 

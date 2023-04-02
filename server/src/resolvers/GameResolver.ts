@@ -1,9 +1,9 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { Service } from "typedi";
 
-import { Game } from "../entity/Game.js";
-import { ResolverContext } from "../index.js";
-import { GameService } from "../services/GameService.js";
+import { Game } from "../entity/Game";
+import { ResolverContext } from "../index";
+import { GameService } from "../services/GameService";
 
 @Service()
 @Resolver(Game)
