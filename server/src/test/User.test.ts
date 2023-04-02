@@ -5,6 +5,7 @@ import { buildSchema } from "type-graphql";
 import { Container } from "typedi";
 import { Db } from "typeorm";
 
+import { gqlCall } from "./testUtils";
 import { GameResolver } from "../resolvers/GameResolver";
 import { DbProvider } from "../services/DbProvider";
 let dbProvider: DbProvider;
@@ -12,7 +13,7 @@ let dbProvider: DbProvider;
 beforeAll(async () => {
   dbProvider = Container.get(DbProvider);
 
-  dbProvider.resetDb();
+  // dbProvider.resetDb();
   dbProvider.runMigrations();
 
   await new Promise((r) => setTimeout(r, 5000));
@@ -27,11 +28,8 @@ test("a user can signup", async () => {
     container: Container,
   });
 
-  const result = graphql({
-    schema,
-    source: "query { getGames{ id }}",
-  });
-  console.log(result);
+  const { data, errors } = await gqlCall({ source: "query { games{ id }}" });
+  console.log(data);
 
   expect(1).toBe(1);
 });

@@ -1,9 +1,9 @@
 import { DataSource } from "typeorm";
 import "reflect-metadata";
 
-import { Game } from "./entity/Game.js";
-import { GameUser } from "./entity/GameUser.js";
-import { User } from "./entity/User.js";
+import { Game } from "./entity/Game";
+import { GameUser } from "./entity/GameUser";
+import { User } from "./entity/User";
 
 const entities = [Game, User, GameUser];
 

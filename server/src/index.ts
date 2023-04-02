@@ -12,13 +12,14 @@ import { buildSchema } from "type-graphql";
 import { Container } from "typedi";
 import { fileURLToPath } from "url";
 
-import { AppDataSource } from "./datasource.js";
-import { UserTable } from "./db/UserTable.js";
-import { Game, GameStatus } from "./entity/Game.js";
-import { User } from "./entity/User.js";
-import { GameResolver } from "./resolvers/GameResolver.js";
-import { DbProvider } from "./services/DbProvider.js";
-import { UserService } from "./services/UserService.js";
+import { createGraphQLSchema } from "./createGraphQLSchema";
+import { AppDataSource } from "./datasource";
+import { UserTable } from "./db/UserTable";
+import { Game, GameStatus } from "./entity/Game";
+import { User } from "./entity/User";
+import { GameResolver } from "./resolvers/GameResolver";
+import { DbProvider } from "./services/DbProvider";
+import { UserService } from "./services/UserService";
 
 const verifier = CognitoJwtVerifier.create({
   userPoolId: "us-east-2_WHIGoYP3n",
@@ -31,10 +32,7 @@ export interface ResolverContext {
 }
 
 async function startServer() {
-  const schema = await buildSchema({
-    resolvers: [GameResolver],
-    container: Container,
-  });
+  const schema = await createGraphQLSchema();
   const server = new ApolloServer<ResolverContext>({ schema });
 
   // const { id } = await db

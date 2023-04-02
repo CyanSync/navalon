@@ -30,11 +30,12 @@ async function up(db: Kysely<any>): Promise<void> {
 }
 
 async function down(db: Kysely<any>): Promise<void> {
+  await db.schema.dropIndex("game_users_game_idx").execute();
+  await db.schema.dropIndex("game_users_user_idx").execute();
+
   await db.schema.dropTable("users").execute();
   await db.schema.dropTable("games").execute();
   await db.schema.dropTable("game_users").execute();
-  await db.schema.dropIndex("game_users_game_idx").execute();
-  await db.schema.dropIndex("game_users_user_idx").execute();
 }
 
 export { up, down };

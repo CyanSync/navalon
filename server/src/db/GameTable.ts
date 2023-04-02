@@ -1,6 +1,6 @@
 import { Generated } from "kysely";
 
-import { GameStatus } from "../entity/Game.js";
+import { GameStatus } from "../entity/Game";
 
 interface GameTable {
   id: Generated<number>;

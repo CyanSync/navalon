@@ -6,11 +6,11 @@ import pg from "pg";
 import { Service } from "typedi";
 import { fileURLToPath } from "url";
 
-import { GameTable } from "../db/GameTable.js";
-import { GameUserTable } from "../db/GameUserTable.js";
-import { UserTable } from "../db/UserTable.js";
+import { GameTable } from "../db/GameTable";
+import { GameUserTable } from "../db/GameUserTable";
+import { UserTable } from "../db/UserTable";
 
-const LOG = false;
+const LOG = true;
 
 interface Database {
   users: UserTable;
@@ -36,7 +36,7 @@ class DbProvider {
       log: LOG ? console.log : undefined,
     });
 
-    this.runMigrations();
+    // this.runMigrations();
   }
   getMigrator() {
     return new Migrator({
@@ -49,8 +49,10 @@ class DbProvider {
     });
   }
   async resetDb() {
+    console.log("doing");
     const migrator = this.getMigrator();
     (await migrator.getMigrations()).forEach((it) => {
+      console.log("each ");
       migrator.migrateDown();
     });
   }
@@ -59,10 +61,6 @@ class DbProvider {
     const __dirname = path.dirname(__filename);
     const db = this.db;
     const migrator = this.getMigrator();
-
-    migrator.migrateDown();
-    migrator.migrateDown();
-    migrator.migrateDown();
 
     await migrator.migrateToLatest();
 

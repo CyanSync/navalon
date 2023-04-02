@@ -1,9 +1,9 @@
 import { Service } from "typedi";
 
-import { DbProvider } from "./DbProvider.js";
-import { AppDataSource } from "../datasource.js";
-import { Game, GameStatus } from "../entity/Game.js";
-import { User } from "../entity/User.js";
+import { DbProvider } from "./DbProvider";
+import { AppDataSource } from "../datasource";
+import { Game, GameStatus } from "../entity/Game";
+import { User } from "../entity/User";
 
 @Service()
 class GameService {
