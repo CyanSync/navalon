@@ -25,6 +25,16 @@ class GameResolver {
 
     return this.gameService.createGame({ name, user: ctx.user });
   }
+
+  @Mutation(() => Boolean)
+  joinGame(@Arg("gameId") gameId: number, @Ctx() ctx: ResolverContext) {
+    if (!ctx.user) {
+      throw Error("You must be logged in to create a game");
+    }
+
+    this.gameService.addUserToGame({ userId: ctx.user.id, gameId });
+    return true;
+  }
 }
 
 export { GameResolver };

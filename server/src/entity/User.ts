@@ -8,7 +8,7 @@ import { GameUser } from "./GameUser.js";
 @ObjectType()
 @Entity()
 class User {
-  @Field((type) => ID)
+  @Field((type) => Number)
   // @PrimaryGeneratedColumn()
   id: number;
 

@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 import { GameTable } from "../db/GameTable.js";
 import { GameUserTable } from "../db/GameUserTable.js";
 import { UserTable } from "../db/UserTable.js";
+
 const LOG = true;
 
 interface Database {

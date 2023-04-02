@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GraphQLAPIClass } from "@aws-amplify/api-graphql";
 import { NavigationProp, useIsFocused, useNavigation } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -21,7 +21,20 @@ const GET_GAMES = graphql(
       games {
         id
         name
+        usersInGame {
+          id
+          name
+        }
       }
+    }
+  `
+);
+
+const JOIN_GAME = graphql(
+  `
+    #graphql
+    mutation JoinGame($id: Float!) {
+      joinGame(gameId: $id)
     }
   `
 );
@@ -40,24 +53,36 @@ function GameSelectorView() {
       <FlatList
         style={{ width: "100%" }}
         data={data?.games}
-        renderItem={({ item }) => <GameBubble game={item} />}
+        renderItem={({ item }) => <GameBubble game={item} key={item.id} />}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
       />
     </Wrapper>
   );
 }
 function GameBubble({ game }: { game: Game }) {
+  const [joinGame, { data, loading, error }] = useMutation(JOIN_GAME);
+
   return (
     <Card>
       <Card.Title title={game.name} />
       <Card.Content>
-        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center" }}>
+        <View
+          style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center" }}
+          key={game.id}>
           <Text variant="labelSmall"> In game: </Text>
-          {/* {game.usersInGame.map((user) => (
-            <Chip style={{ margin: 3, width: "10", maxWidth: 100 }}>{user.name}</Chip>
-          ))} */}
+          {game.usersInGame.map((user) => (
+            <Chip style={{ margin: 5, width: "max-content" }} compact key={user.id}>
+              {user.name}
+            </Chip>
+          ))}
         </View>
-        <Button mode="contained-tonal">Join</Button>
+        <Button
+          mode="contained-tonal"
+          onPress={() => {
+            joinGame({ variables: { id: game.id } });
+          }}>
+          Join
+        </Button>
       </Card.Content>
     </Card>
   );
