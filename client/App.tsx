@@ -38,9 +38,9 @@ export default function App() {
   return (
     <PaperProvider>
       <ApolloProvider client={client}>
-        <NavigationContainer theme={DarkTheme}>
+        <NavigationContainer theme={DarkTheme} linking={{ enabled: true, prefixes: ["localhost"] }}>
           {/* <View style={styles.container}> */}
-          <Stack.Navigator initialRouteName="GameSelectorView">
+          <Stack.Navigator initialRouteName="Login">
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen
               name="GameSelectorView"

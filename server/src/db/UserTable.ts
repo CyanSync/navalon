@@ -5,6 +5,7 @@ interface UserTable {
 
   email: string;
   name: string;
+  created_at: Generated<Date>;
 }
 
 export { UserTable };

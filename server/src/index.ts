@@ -3,7 +3,7 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 import { promises as fs } from "fs";
 import { IncomingMessage, ServerResponse } from "http";
-import { FileMigrationProvider, Kysely, Migrator, PostgresDialect } from "kysely";
+import { DropViewBuilder, FileMigrationProvider, Kysely, Migrator, PostgresDialect } from "kysely";
 import * as path from "path";
 import pg from "pg";
 
@@ -18,6 +18,7 @@ import { Game, GameStatus } from "./entity/Game.js";
 import { User } from "./entity/User.js";
 import { GameResolver } from "./resolvers/GameResolver.js";
 import { DbProvider } from "./services/DbProvider.js";
+import { UserService } from "./services/UserService.js";
 
 const verifier = CognitoJwtVerifier.create({
   userPoolId: "us-east-2_WHIGoYP3n",
@@ -25,7 +26,7 @@ const verifier = CognitoJwtVerifier.create({
   clientId: ["ir15j2df7lc1apu83nvcbtbnk", "27qlrc2c6prp1c2tfl0pdbqgfu"],
 });
 
-interface Context {
+export interface ResolverContext {
   user: User | undefined;
 }
 
@@ -34,7 +35,7 @@ async function startServer() {
     resolvers: [GameResolver],
     container: Container,
   });
-  const server = new ApolloServer<Context>({ schema });
+  const server = new ApolloServer<ResolverContext>({ schema });
 
   // const { id } = await db
   //   .insertInto("user")
@@ -48,18 +49,28 @@ async function startServer() {
     listen: { port: 4000 },
     context: async ({ req, res }: { req: IncomingMessage; res: ServerResponse }) => {
       const token = req.headers.authorization || "";
+      let userInfo: { name: string; email: string };
+
       try {
         const payload = await verifier.verify(token);
-        console.log("Token is valid. Payload:", payload);
-        return { user: new User(payload.email as string, payload.name as string) };
+        console.log(payload);
+        const name = payload.given_name + " " + payload.family_name;
+        const email = payload.email as string;
+        userInfo = { name, email };
       } catch (e) {
-        return { user: new User("shahan.neda@gmail.com", "Shahan Nedadahandeh") };
+        userInfo = { name: "Test User", email: "test@example.com" };
+        // return { user: new User("shahan.neda@gmail.com", "Shahan Nedadahandeh") };
         //   throw new GraphQLError("User is not authenticated", {
         //     extensions: {
         //       code: "UNAUTHENTICATED",
         //     },
         //   });
       }
+
+      const userService = Container.get(UserService);
+      const user = await userService.getUserByEmailOrCreate(userInfo.email, userInfo.name);
+
+      return { user };
     },
   });
   console.log(`server started at ${url}`);

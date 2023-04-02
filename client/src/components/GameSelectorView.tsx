@@ -1,9 +1,9 @@
 import { useQuery } from "@apollo/client";
 import { GraphQLAPIClass } from "@aws-amplify/api-graphql";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { NavigationProp, useIsFocused, useNavigation } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Auth } from "aws-amplify";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Image, StyleSheet, FlatList } from "react-native";
 import { Button, Card, Chip, Text, List } from "react-native-paper";
 import ListItem from "react-native-paper/lib/typescript/src/components/List/ListItem";
@@ -21,18 +21,19 @@ const GET_GAMES = graphql(
       games {
         id
         name
-        status
-        usersInGame {
-          id
-          name
-        }
       }
     }
   `
 );
 
-function GameSelectorView({}: object) {
-  const { data } = useQuery(GET_GAMES);
+function GameSelectorView() {
+  const { data, refetch } = useQuery(GET_GAMES);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    refetch();
+  }, [isFocused]);
 
   return (
     <Wrapper>
@@ -52,9 +53,9 @@ function GameBubble({ game }: { game: Game }) {
       <Card.Content>
         <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center" }}>
           <Text variant="labelSmall"> In game: </Text>
-          {game.usersInGame.map((user) => (
+          {/* {game.usersInGame.map((user) => (
             <Chip style={{ margin: 3, width: "10", maxWidth: 100 }}>{user.name}</Chip>
-          ))}
+          ))} */}
         </View>
         <Button mode="contained-tonal">Join</Button>
       </Card.Content>

@@ -7,11 +7,14 @@ import { Service } from "typedi";
 import { fileURLToPath } from "url";
 
 import { GameTable } from "../db/GameTable.js";
+import { GameUserTable } from "../db/GameUserTable.js";
 import { UserTable } from "../db/UserTable.js";
+const LOG = true;
 
 interface Database {
   users: UserTable;
   games: GameTable;
+  game_users: GameUserTable;
 }
 
 @Service()
@@ -19,7 +22,6 @@ class DbProvider {
   db: Kysely<Database>;
 
   constructor() {
-    console.log("running constructer");
     this.db = new Kysely<Database>({
       dialect: new PostgresDialect({
         pool: new pg.Pool({
@@ -30,7 +32,7 @@ class DbProvider {
           port: 5433,
         }),
       }),
-      log: console.log,
+      log: LOG ? console.log : undefined,
     });
 
     this.runMigrations();

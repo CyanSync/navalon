@@ -9,27 +9,28 @@ import { GameUser } from "./GameUser.js";
 @Entity()
 class User {
   @Field((type) => ID)
-  @PrimaryGeneratedColumn()
-  id: string = "";
+  // @PrimaryGeneratedColumn()
+  id: number;
 
   @Field((type) => String)
-  @IsEmail()
-  @Column()
+  // @IsEmail()
+  // @Column()
   email: string;
 
   @Field((type) => String)
-  @MaxLength(100)
-  @Column()
+  // @MaxLength(100)
+  // @Column()
   name: string;
 
-  @OneToMany(() => GameUser, (gameUser) => gameUser.user)
+  // @OneToMany(() => GameUser, (gameUser) => gameUser.user)
   userGames: GameUser[];
 
   // @ManyToMany(() => Game, (game) => game.usersInGame)
   // @Column()
   // gamesUserIsIn: Game[];
 
-  constructor(email: string, name: string) {
+  constructor(id: number, email: string, name: string) {
+    this.id = id;
     this.email = email;
     this.name = name;
   }

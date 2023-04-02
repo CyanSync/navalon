@@ -8,14 +8,15 @@ import { User } from "./User.js";
 @ObjectType()
 // @Entity()
 class Game {
-  constructor(id: string, name: string, status: GameStatus) {
+  constructor(id: number, name: string, status: GameStatus, usersInGame: User[]) {
     this.id = id;
     this.name = name;
     this.status = status;
+    this.usersInGame = usersInGame;
   }
 
   @Field((type) => ID)
-  id: string = "0";
+  id: number;
 
   @Field()
   name: string = "";
@@ -23,7 +24,8 @@ class Game {
   @Field()
   status: GameStatus = GameStatus.LOBBY;
 
-  gameUsers: GameUser[];
+  @Field(() => [User])
+  usersInGame: User[];
 }
 
 enum GameStatus {
