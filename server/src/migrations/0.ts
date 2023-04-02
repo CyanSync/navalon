@@ -5,7 +5,7 @@ async function up(db: Kysely<any>): Promise<void> {
     .createTable("users")
     .addColumn("id", "serial", (col) => col.primaryKey())
     .addColumn("name", "varchar", (col) => col.notNull())
-    .addColumn("email", "varchar", (col) => col.notNull())
+    .addColumn("email", "varchar", (col) => col.notNull().unique())
     .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
     .execute();
 
@@ -15,6 +15,7 @@ async function up(db: Kysely<any>): Promise<void> {
     .addColumn("name", "varchar", (col) => col.notNull())
     .addColumn("status", "varchar", (col) => col.notNull())
     .addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`now()`).notNull())
+    .addColumn("owner", "serial", (col) => col.notNull())
     .execute();
 
   await db.schema

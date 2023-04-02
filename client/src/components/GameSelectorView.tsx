@@ -61,6 +61,7 @@ function GameSelectorView() {
 }
 function GameBubble({ game }: { game: Game }) {
   const [joinGame, { data, loading, error }] = useMutation(JOIN_GAME);
+  const navigator = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (
     <Card>
@@ -78,8 +79,9 @@ function GameBubble({ game }: { game: Game }) {
         </View>
         <Button
           mode="contained-tonal"
-          onPress={() => {
-            joinGame({ variables: { id: game.id } });
+          onPress={async () => {
+            await joinGame({ variables: { id: game.id } });
+            navigator.navigate("GameLobbyView", { gameId: game.id });
           }}>
           Join
         </Button>

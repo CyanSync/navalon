@@ -18,6 +18,7 @@ class UserService {
     const user = await this.dbProvider.db
       .selectFrom("users")
       .select(["id", "name", "email"])
+      .where("email", "=", email)
       .executeTakeFirst();
 
     if (user) {

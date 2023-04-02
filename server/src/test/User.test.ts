@@ -23,7 +23,6 @@ beforeAll(async () => {
 test("user can create a game and will be in that game", async () => {
   const userService = Container.get(UserService);
   const user1 = await userService.getUserByEmailOrCreate("shahan@shahan.ca", "Shahan Neda");
-  const user2 = await userService.getUserByEmailOrCreate("shahan2@shahan.ca", "Shahan Neda2");
   // const users = await dbProvider.db.selectFrom("users").select(["id", "name", "email"]).execute();
 
   const { data, errors } = await gqlCall({
@@ -53,7 +52,33 @@ test("user can create a game and will be in that game", async () => {
     .rightJoin("users", "users.id", "game_users.user")
     .select(["users.email"])
     .execute();
-
   expect(gameUser.length).toBe(1);
-  expect(gameUser[0].email).toBe("test@example.com");
+  expect(gameUser[0].email).toBe("shahan@shahan.ca");
+  const user2 = await userService.getUserByEmailOrCreate("shahan2@shahan.ca", "Shahan Neda2");
+
+  const { data: data2, errors: errors2 } = await gqlCall({
+    source: `#graphql
+			mutation JoinGame($gameId: Float!) {
+				joinGame(gameId: $gameId)
+			}
+		`,
+    variableValues: { gameId: games[0].id },
+    context: { user: user2 },
+  });
+
+  console.log(errors2);
+
+  const gameUsers2 = await dbProvider.db
+    .selectFrom("game_users")
+    .select(["game_users.id", "game", "user"])
+    .where("game", "=", games[0].id)
+    .rightJoin("users", "users.id", "game_users.user")
+    .select(["users.email"])
+    .execute();
+  console.log(gameUsers2);
+
+  expect(gameUsers2.length).toBe(2);
+  // expect(gameUsers2.map((u) => u.email)).toEqual(
+  //   expect.arrayContaining(["shahan@shahan.ca", "shahan2@shahan.ca"])
+  // );
 });

@@ -8,12 +8,14 @@ import { Provider as PaperProvider } from "react-native-paper";
 
 import { Login } from "./src/Login";
 import { CreateNewGameView } from "./src/components/CreateNewGameView";
+import { GameLobbyView } from "./src/components/GameLobbyView";
 import { CreateNewButton, GameSelectorView } from "./src/components/GameSelectorView";
 import { useAuthentication } from "./src/utils/getUserHook";
 
 // Initialize Apollo Client
 const httpLink = createHttpLink({
-  uri: "http://192.168.1.120:4000",
+  // uri: "http://192.168.1.120:4000",
+  uri: "http://localhost:4000",
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -50,8 +52,8 @@ export default function App() {
               }}
             />
             <Stack.Screen name="CreateNewGameView" component={CreateNewGameView} />
+            <Stack.Screen name="GameLobbyView" component={GameLobbyView} />
           </Stack.Navigator>
-          {/* </View> */}
         </NavigationContainer>
       </ApolloProvider>
     </PaperProvider>

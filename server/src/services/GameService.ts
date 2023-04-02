@@ -12,7 +12,7 @@ class GameService {
   async getGames() {
     const games = await this.dbProvider.db
       .selectFrom("games")
-      .select(["games.id", "games.name", "games.created_at", "games.status"])
+      .select(["games.id", "games.name", "games.created_at", "games.status", "owner"])
       .orderBy("created_at", "desc")
       .execute();
 
@@ -31,25 +31,54 @@ class GameService {
 
     const finalGames: Record<number, Game> = {};
     games.forEach((game) => {
-      const fullGame = new Game(game.id, game.name, game.status, [], game.created_at);
+      let gameStatus = game.status as GameStatus;
+      if (Object.values(GameStatus).indexOf(gameStatus) === -1) {
+        gameStatus = GameStatus.LOBBY;
+      }
+
+      const fullGame = new Game(game.id, game.name, gameStatus, [], game.created_at, game.owner);
       finalGames[game.id] = fullGame;
     });
+    console.log(finalGames);
 
     usersInGames.forEach((userInGame) => {
       const game = finalGames[userInGame.game];
       const user = new User(userInGame.user, userInGame.email, userInGame.name);
-      console.log(user);
       finalGames[game.id].usersInGame.push(user);
     });
 
     return Object.values(finalGames).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
+  async getGame(id: number) {
+    console.log("getting game", id);
+    const game = await this.dbProvider.db
+      .selectFrom("games")
+      .select(["games.id", "games.name", "games.created_at", "games.status", "owner"])
+      .orderBy("created_at", "desc")
+      .where("games.id", "=", id)
+      .executeTakeFirst();
+    console.log("gmae is", game);
+    return game;
+  }
+
+  async getUsersInGame(id: number) {
+    console.log("getting users in game", id);
+    const usersInGames = await this.dbProvider.db
+      .selectFrom("game_users")
+      .select(["game_users.user"])
+      .where("game_users.game", "=", id)
+      .innerJoin("users", "users.id", "game_users.user")
+      .selectAll()
+      .execute();
+    return usersInGames;
+  }
+
   async createGame({ name, user }: { name: string; user: User }): Promise<Game> {
-    const status = GameStatus.ACTIVE;
+    const status = GameStatus.LOBBY;
     const game = await this.dbProvider.db
       .insertInto("games")
-      .values({ name, status })
+      .values({ name, status, owner: user.id })
       .returning(["id", "name", "status", "created_at"])
       .executeTakeFirstOrThrow();
 
@@ -59,11 +88,10 @@ class GameService {
       .returning(["id"])
       .execute();
 
-    return new Game(game.id, game.name, status, [], game.created_at);
+    return new Game(game.id, game.name, status, [], game.created_at, user.id);
   }
 
   async addUserToGame({ userId, gameId }: { userId: number; gameId: number }) {
-    console.log("in add user to game");
     const alreadyInGame = await this.dbProvider.db
       .selectFrom("game_users")
       .where("game_users.game", "=", gameId)
@@ -75,6 +103,7 @@ class GameService {
       // User is already in game
       return;
     }
+
     await this.dbProvider.db
       .insertInto("game_users")
       .values({ game: gameId, user: userId })

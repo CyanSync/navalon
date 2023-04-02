@@ -49,10 +49,9 @@ class DbProvider {
     });
   }
   async resetDb() {
-    console.log("doing");
+    console.log("Reseting DB");
     const migrator = this.getMigrator();
     (await migrator.getMigrations()).forEach((it) => {
-      console.log("each ");
       migrator.migrateDown();
     });
   }
