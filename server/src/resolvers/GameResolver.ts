@@ -69,10 +69,9 @@ class GameResolver implements ResolverInterface<Game> {
     @Arg("gameSettingsInput") newSettings: GameSettings,
     @Ctx() ctx: ResolverContext
   ) {
-    console.log("inside update game settings");
-    // if (!ctx.user) {
-    //   throw Error("You must be logged in to create a game");
-    // }
+    if (!ctx.user) {
+      throw Error("You must be logged in to edit a game.");
+    }
 
     // TODO: Check user is owner of game before allowing them to update the settings
 

@@ -22,20 +22,20 @@ class GameSettings {
   mordred: boolean = false;
 
   @Field()
-  lady_of_lake: boolean = false;
+  ladyOfLake: boolean = false;
 
   constructor(
     gameId: number,
     percival: boolean = false,
     oberon: boolean = false,
     mordred: boolean = false,
-    lady_of_lake: boolean = false
+    ladyOfLake: boolean = false
   ) {
     this.gameId = gameId;
     this.percival = percival;
     this.oberon = oberon;
     this.mordred = mordred;
-    this.lady_of_lake = lady_of_lake;
+    this.ladyOfLake = ladyOfLake;
   }
 }
 

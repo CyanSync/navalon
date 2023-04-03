@@ -25,6 +25,7 @@ class GameSettingsService {
   }
 
   async setGameSettings(gameSettings: GameSettings): Promise<GameSettings> {
+    console.log("SETTING TO ", gameSettings);
     const game = await this.dbProvider.db
       .insertInto("game_settings")
       .values({
@@ -32,14 +33,14 @@ class GameSettingsService {
         percival: gameSettings.percival,
         oberon: gameSettings.oberon,
         mordred: gameSettings.mordred,
-        lady_of_lake: gameSettings.lady_of_lake,
+        lady_of_lake: gameSettings.ladyOfLake,
       })
       .onConflict((oc) =>
         oc.column("game_id").doUpdateSet({
           percival: gameSettings.percival,
           oberon: gameSettings.oberon,
           mordred: gameSettings.mordred,
-          lady_of_lake: gameSettings.lady_of_lake,
+          lady_of_lake: gameSettings.ladyOfLake,
         })
       )
       .returningAll()

@@ -11,7 +11,7 @@ import { GameTable } from "../db/GameTable";
 import { GameUserTable } from "../db/GameUserTable";
 import { UserTable } from "../db/UserTable";
 
-const LOG = false;
+const LOG = true;
 
 interface Database {
   users: UserTable;
