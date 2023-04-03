@@ -9,8 +9,9 @@ import { Button, Card, Chip, Text, List } from "react-native-paper";
 import ListItem from "react-native-paper/lib/typescript/src/components/List/ListItem";
 
 import { Wrapper } from "./Wrapper";
+import { UsersInGameChips } from "../UsersInGameChips";
 import { graphql } from "../__generated__";
-import { Game } from "../__generated__/graphql";
+import { Game, User } from "../__generated__/graphql";
 import { RootStackParamList } from "../rootStackParamList";
 import { useAuthentication, useCurrentUser } from "../utils/getUserHook";
 
@@ -71,11 +72,7 @@ function GameBubble({ game }: { game: Game }) {
           style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center" }}
           key={game.id}>
           <Text variant="labelSmall"> In game: </Text>
-          {game.usersInGame.map((user) => (
-            <Chip style={{ margin: 5, width: "max-content" }} compact key={user.id}>
-              {user.name}
-            </Chip>
-          ))}
+          <UsersInGameChips users={game.usersInGame} />
         </View>
         <Button
           mode="contained-tonal"

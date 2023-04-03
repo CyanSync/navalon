@@ -8,7 +8,9 @@ import { View, Image, StyleSheet, FlatList } from "react-native";
 import { Button, Card, Chip, Text, List } from "react-native-paper";
 import ListItem from "react-native-paper/lib/typescript/src/components/List/ListItem";
 
+import { Spacer } from "./Spacer";
 import { Wrapper } from "./Wrapper";
+import { UsersInGameChips } from "../UsersInGameChips";
 import { graphql } from "../__generated__";
 import { Game } from "../__generated__/graphql";
 import { RootStackParamList } from "../rootStackParamList";
@@ -25,6 +27,7 @@ const GET_GAME = graphql(
         usersInGame {
           id
           name
+          email
         }
         owner
       }
@@ -74,10 +77,17 @@ function GameLobbyView({
   const game = data.game;
 
   return (
-    <Wrapper>
+    <Wrapper shouldCenterVertically={false}>
       <Text variant="headlineMedium">
-        Game Lobby ({gameId}): {game.name}
+        Game Lobby (id: {gameId}): {game.name}
       </Text>
+      <Spacer />
+      <Card>
+        <Card.Title title="Users In Game:" />
+        <Card.Content>
+          <UsersInGameChips users={game.usersInGame} />
+        </Card.Content>
+      </Card>
     </Wrapper>
   );
 }
