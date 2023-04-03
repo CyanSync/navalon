@@ -6,6 +6,7 @@ import pg from "pg";
 import { Service } from "typedi";
 import { fileURLToPath } from "url";
 
+import { GameSettingsTable } from "../db/GameSettingsTable";
 import { GameTable } from "../db/GameTable";
 import { GameUserTable } from "../db/GameUserTable";
 import { UserTable } from "../db/UserTable";
@@ -16,6 +17,7 @@ interface Database {
   users: UserTable;
   games: GameTable;
   game_users: GameUserTable;
+  game_settings: GameSettingsTable;
 }
 
 @Service()

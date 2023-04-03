@@ -12,14 +12,16 @@ import {
 import { Service } from "typedi";
 
 import { Game } from "../entity/Game";
+import { GameSettings } from "../entity/GameSettings";
 import { User } from "../entity/User";
 import { ResolverContext } from "../index";
 import { GameService } from "../services/GameService";
+import { GameSettingsService } from "../services/GameSettingsService";
 
 @Service()
 @Resolver(Game)
 class GameResolver implements ResolverInterface<Game> {
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private gameSettingsService: GameSettingsService) {}
 
   @Query(() => [Game])
   games(@Ctx() ctx: ResolverContext) {
@@ -55,6 +57,26 @@ class GameResolver implements ResolverInterface<Game> {
   @FieldResolver(() => [User], { defaultValue: [] })
   async usersInGame(@Root() root: Game): Promise<User[]> {
     return await this.gameService.getUsersInGame(root.id);
+  }
+
+  @FieldResolver(() => [User], { defaultValue: [] })
+  async gameSettings(@Root() root: Game): Promise<GameSettings> {
+    return await this.gameSettingsService.getGameSettings(root.id);
+  }
+
+  @Mutation(() => GameSettings)
+  async updateGameSettings(
+    @Arg("gameSettingsInput") newSettings: GameSettings,
+    @Ctx() ctx: ResolverContext
+  ) {
+    console.log("inside update game settings");
+    // if (!ctx.user) {
+    //   throw Error("You must be logged in to create a game");
+    // }
+
+    // TODO: Check user is owner of game before allowing them to update the settings
+
+    return await this.gameSettingsService.setGameSettings(newSettings);
   }
 }
 

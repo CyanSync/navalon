@@ -2,11 +2,11 @@ import { MaxLength } from "class-validator";
 import { Field, ID, ObjectType, registerEnumType } from "type-graphql";
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
+import { GameSettings } from "./GameSettings";
 import { GameUser } from "./GameUser";
 import { User } from "./User";
 
 @ObjectType()
-// @Entity()
 class Game {
   constructor(
     id: number,
@@ -38,6 +38,9 @@ class Game {
 
   @Field()
   owner: number;
+
+  @Field(() => GameSettings)
+  gameSettings: GameSettings;
 
   createdAt: Date;
 }
