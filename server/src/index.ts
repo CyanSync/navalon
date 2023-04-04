@@ -2,12 +2,13 @@ import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { startStandaloneServer } from "@apollo/server/standalone";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 import { json } from "body-parser";
 import cors from "cors";
 import express from "express";
 import { promises as fs } from "fs";
-import http, { IncomingMessage, ServerResponse } from "http";
+import http, { IncomingMessage, ServerResponse, createServer } from "http";
 import { DropViewBuilder, FileMigrationProvider, Kysely, Migrator, PostgresDialect } from "kysely";
 import * as path from "path";
 import pg from "pg";
@@ -16,6 +17,7 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { Container } from "typedi";
 import { fileURLToPath } from "url";
+import { WebSocketServer } from "ws";
 
 import { createGraphQLSchema } from "./createGraphQLSchema";
 import { AppDataSource } from "./datasource";
@@ -25,6 +27,9 @@ import { User } from "./entity/User";
 import { GameResolver } from "./resolvers/GameResolver";
 import { DbProvider } from "./services/DbProvider";
 import { UserService } from "./services/UserService";
+
+import { useServer } from "graphql-ws/lib/use/ws";
+
 const PORT = 4000;
 
 const verifier = CognitoJwtVerifier.create({
@@ -38,9 +43,19 @@ export interface ResolverContext {
 }
 const app = express();
 const httpServer = http.createServer(app);
-
 async function startServer() {
   const schema = await createGraphQLSchema();
+
+  const wsServer = new WebSocketServer({
+    // This is the `httpServer` we created in a previous step.
+    server: httpServer,
+    // Pass a different path here if app.use
+    // serves expressMiddleware at a different path
+    path: "/",
+  });
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const serverCleanup = useServer({ schema }, wsServer);
   const server = new ApolloServer<ResolverContext>({
     schema,
 
@@ -49,7 +64,19 @@ async function startServer() {
     //   path: "/subscriptions",
     //   // other options and hooks, like `onConnect`
     // },
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      // Proper shutdown for the WebSocket server.
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose();
+            },
+          };
+        },
+      },
+    ],
   });
   await server.start();
 

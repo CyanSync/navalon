@@ -17,12 +17,14 @@
   "dependencies": {
     "@apollo/server": "^4.5.0",
     "@types/cors": "^2.8.13",
+    "@types/ws": "^8.5.4",
     "aws-jwt-verify": "^4.0.0",
     "class-validator": "^0.14.0",
     "concurrently": "^7.6.0",
     "cors": "^2.8.5",
     "graphql": "^16.6.0",
     "graphql-subscriptions": "^2.0.0",
+    "graphql-ws": "^5.12.1",
     "kysely": "^0.24.2",
     "nodemon": "^2.0.21",
     "pg": "^8.10.0",
@@ -30,7 +32,8 @@
     "type-graphql": "^2.0.0-beta.1",
     "typedi": "^0.10.0",
     "typeorm": "^0.3.12",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.0",

@@ -4,12 +4,14 @@
     "@typescript-eslint/parser": "^5.55.0",
     "eslint": "^8.36.0",
     "eslint-config-universe": "^11.2.0",
-    "prettier": "^2.8.4"
+    "graphql-ws": "^5.12.1",
+    "prettier": "^2.8.4",
+    "ws": "^8.13.0"
   },
   "eslintConfig": {
     "extends": "universe/native",
     "rules": {
       "@typescript-eslint/no-unused-vars": "off"
-      }
+    }
   }
 }
