@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n    #graphql\n    mutation CreateGame($name: String!) {\n      createGame(name: $name) {\n        id\n      }\n    }\n  ": types.CreateGameDocument,
     "\n    #graphql\n    query Game($gameId: Float!) {\n      game(id: $gameId) {\n        id\n        name\n        status\n        usersInGame {\n          id\n          name\n          email\n        }\n        owner\n        gameSettings {\n          gameId\n          percival\n          oberon\n          mordred\n          ladyOfLake\n        }\n      }\n    }\n  ": types.GameDocument,
+    "\n  #graphql\n  subscription Subscription($gameId: Float!) {\n    gameChange(gameId: $gameId) {\n      shouldRefetch\n    }\n  }\n": types.SubscriptionDocument,
     "\n    #graphql\n    mutation UpdateGameSettings($gameSettingsInput: GameSettingsInput!) {\n      updateGameSettings(gameSettingsInput: $gameSettingsInput) {\n        gameId\n        percival\n        oberon\n        mordred\n        ladyOfLake\n      }\n    }\n  ": types.UpdateGameSettingsDocument,
     "\n    #graphql\n    query Games {\n      games {\n        id\n        name\n        usersInGame {\n          id\n          name\n        }\n      }\n    }\n  ": types.GamesDocument,
     "\n    #graphql\n    mutation JoinGame($id: Float!) {\n      joinGame(gameId: $id)\n    }\n  ": types.JoinGameDocument,
@@ -42,6 +43,10 @@ export function graphql(source: "\n    #graphql\n    mutation CreateGame($name: 
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    #graphql\n    query Game($gameId: Float!) {\n      game(id: $gameId) {\n        id\n        name\n        status\n        usersInGame {\n          id\n          name\n          email\n        }\n        owner\n        gameSettings {\n          gameId\n          percival\n          oberon\n          mordred\n          ladyOfLake\n        }\n      }\n    }\n  "): (typeof documents)["\n    #graphql\n    query Game($gameId: Float!) {\n      game(id: $gameId) {\n        id\n        name\n        status\n        usersInGame {\n          id\n          name\n          email\n        }\n        owner\n        gameSettings {\n          gameId\n          percival\n          oberon\n          mordred\n          ladyOfLake\n        }\n      }\n    }\n  "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  #graphql\n  subscription Subscription($gameId: Float!) {\n    gameChange(gameId: $gameId) {\n      shouldRefetch\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  subscription Subscription($gameId: Float!) {\n    gameChange(gameId: $gameId) {\n      shouldRefetch\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

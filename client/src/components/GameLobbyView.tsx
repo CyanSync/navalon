@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { GraphQLAPIClass } from "@aws-amplify/api-graphql";
 import { NavigationProp, useIsFocused, useNavigation } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -42,17 +42,45 @@ const GET_GAME = graphql(
   `
 );
 
+const GAME_CHANGE = graphql(`
+  #graphql
+  subscription Subscription($gameId: Float!) {
+    gameChange(gameId: $gameId) {
+      shouldRefetch
+    }
+  }
+`);
+
 function GameLobbyView({
   navigation,
   route,
 }: NativeStackScreenProps<RootStackParamList, "GameLobbyView">) {
   const gameId = Number(route.params.gameId);
+
   const [gameData, setGameData] = useState<{ game?: Game }>({});
 
-  const { error, refetch } = useQuery(GET_GAME, {
+  const { subscribeToMore, error, refetch } = useQuery(GET_GAME, {
     variables: { gameId },
     onCompleted: (data) => setGameData({ game: data?.game }),
   });
+
+  const { data, ...result } = useSubscription(GAME_CHANGE, {
+    variables: { gameId },
+  });
+
+  useEffect(() => {
+    subscribeToMore({
+      document: GAME_CHANGE,
+      variables: { gameId },
+      updateQuery: (prev, { subscriptionData }) => {
+        console.log(subscriptionData.data.gameChange);
+        if (subscriptionData.data.gameChange.shouldRefetch) {
+          refetch();
+        }
+        return prev;
+      },
+    });
+  }, []);
 
   const isFocused = useIsFocused();
 
@@ -85,9 +113,9 @@ function GameLobbyView({
     );
   }
 
-  setInterval(async () => {
-    await refetch();
-  }, 1000);
+  // setInterval(async () => {
+  //   await refetch();
+  // }, 1000);
   const game = gameData.game;
 
   return (
@@ -126,16 +154,19 @@ const UPDATE_SETTINGS = graphql(
 );
 
 function GameSettingsView({ gameSettings }: { gameSettings: GameSettings }) {
-  console.log("doing render");
   const [ladyOfLake, setLadyOfLake] = useState(gameSettings.ladyOfLake);
   const [mordred, setMordred] = useState(gameSettings.mordred);
   const [oberon, setOberon] = useState(gameSettings.oberon);
   const [percival, setPercival] = useState(gameSettings.percival);
+  const [userUpdatedValue, setUserUpdatedValue] = useState(false);
 
   const [updateSettings, { data, loading, error }] = useMutation(UPDATE_SETTINGS);
-  console.log(gameSettings.gameId);
 
   useEffect(() => {
+    if (!userUpdatedValue) {
+      return;
+    }
+
     updateSettings({
       variables: {
         gameSettingsInput: {
@@ -147,6 +178,7 @@ function GameSettingsView({ gameSettings }: { gameSettings: GameSettings }) {
         },
       },
     });
+    setUserUpdatedValue(true);
   }, [ladyOfLake, mordred, oberon, percival]);
 
   function ToggleBox({
@@ -170,8 +202,8 @@ function GameSettingsView({ gameSettings }: { gameSettings: GameSettings }) {
           <Switch
             value={item}
             onValueChange={async () => {
+              setUserUpdatedValue(true);
               setItem(!item);
-              console.log(data, error);
             }}
           />
         )}

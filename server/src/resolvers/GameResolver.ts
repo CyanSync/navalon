@@ -17,17 +17,12 @@ import {
 import { Service } from "typedi";
 
 import { Game } from "../entity/Game";
+import { GameChangePayload } from "../entity/GameChangePayload";
 import { GameSettings } from "../entity/GameSettings";
 import { User } from "../entity/User";
 import { ResolverContext } from "../index";
 import { GameService } from "../services/GameService";
 import { GameSettingsService } from "../services/GameSettingsService";
-
-@ObjectType()
-class GameChangePayload {
-  @Field()
-  change: boolean = false;
-}
 
 @Service()
 @Resolver(Game)
@@ -88,16 +83,18 @@ class GameResolver implements ResolverInterface<Game> {
     // TODO: Check user is owner of game before allowing them to update the settings
 
     const output = await this.gameSettingsService.setGameSettings(newSettings);
-    // const payload: Game | undefined = await this.game(output.gameId, ctx);
-    await pubSub.publish("GAME_CHANGE", { change: true });
+    await pubSub.publish("GAME_CHANGE", new GameChangePayload(true));
 
     return output;
   }
 
   @Subscription(() => GameChangePayload, { topics: "GAME_CHANGE" })
-  gameChange(@Root() gameChangePayload: GameChangePayload): GameChangePayload {
-    console.log(gameChangePayload);
-    return new GameChangePayload();
+  gameChange(
+    @Root() gameChangePayload: GameChangePayload,
+    @Arg("gameId") gameId: number
+  ): GameChangePayload {
+    console.log("here");
+    return gameChangePayload;
   }
 }
 

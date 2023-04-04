@@ -22,26 +22,29 @@ import { GameLobbyView } from "./src/components/GameLobbyView";
 import { CreateNewButton, GameSelectorView } from "./src/components/GameSelectorView";
 import { useAuthentication } from "./src/utils/getUserHook";
 
+const URI = "192.168.1.116:4000";
 // Initialize Apollo Client
 const httpLink = createHttpLink({
   // uri: "http://192.168.1.120:4000",
-  uri: "http://localhost:4000",
+  uri: "http://" + URI,
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("token");
-  console.log("token is", token);
-  return {
-    headers: {
-      ...headers,
-      authorization: token ?? "",
-    },
-  };
+  try {
+    const token = localStorage.getItem("token");
+    console.log("token is", token);
+    return {
+      headers: {
+        ...headers,
+        authorization: token ?? "",
+      },
+    };
+  } catch (e) {}
 });
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: "ws://localhost:4000/subscriptions",
+    url: "ws://" + URI,
   })
 );
 // The split function takes three parameters:
@@ -68,7 +71,9 @@ export default function App() {
   return (
     <PaperProvider>
       <ApolloProvider client={client}>
-        <NavigationContainer theme={DarkTheme} linking={{ enabled: true, prefixes: ["localhost"] }}>
+        <NavigationContainer
+          theme={DarkTheme}
+          linking={{ enabled: false, prefixes: ["localhost"] }}>
           {/* <View style={styles.container}> */}
           <Stack.Navigator initialRouteName="Login">
             <Stack.Screen name="Login" component={Login} />

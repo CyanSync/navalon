@@ -41,7 +41,8 @@ const JOIN_GAME = graphql(
 );
 
 function GameSelectorView() {
-  const { data, refetch } = useQuery(GET_GAMES);
+  const { data, refetch, error } = useQuery(GET_GAMES);
+  console.log(data, error);
 
   const isFocused = useIsFocused();
 
