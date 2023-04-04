@@ -16,10 +16,13 @@
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.5.0",
+    "@types/cors": "^2.8.13",
     "aws-jwt-verify": "^4.0.0",
     "class-validator": "^0.14.0",
     "concurrently": "^7.6.0",
+    "cors": "^2.8.5",
     "graphql": "^16.6.0",
+    "graphql-subscriptions": "^2.0.0",
     "kysely": "^0.24.2",
     "nodemon": "^2.0.21",
     "pg": "^8.10.0",
@@ -39,7 +42,7 @@
   },
   "jest": {
     "transform": {
-        "^.+\\.(ts|tsx)$": "ts-jest"
+      "^.+\\.(ts|tsx)$": "ts-jest"
     }
   }
 }

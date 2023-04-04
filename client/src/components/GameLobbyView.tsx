@@ -47,13 +47,14 @@ function GameLobbyView({
   route,
 }: NativeStackScreenProps<RootStackParamList, "GameLobbyView">) {
   const gameId = Number(route.params.gameId);
-  const { data, error, refetch } = useQuery(GET_GAME, { variables: { gameId } });
-  // setInterval(() => {
-  //   refetch();
-  // }, 500);
+  const [gameData, setGameData] = useState<{ game?: Game }>({});
+
+  const { error, refetch } = useQuery(GET_GAME, {
+    variables: { gameId },
+    onCompleted: (data) => setGameData({ game: data?.game }),
+  });
 
   const isFocused = useIsFocused();
-  console.log(data);
 
   useEffect(() => {
     refetch();
@@ -68,7 +69,7 @@ function GameLobbyView({
     );
   }
 
-  if (!data) {
+  if (!gameData) {
     return (
       <Wrapper>
         <Text variant="headlineMedium">Loading...</Text>
@@ -76,7 +77,7 @@ function GameLobbyView({
     );
   }
 
-  if (!data.game) {
+  if (!gameData.game) {
     return (
       <Wrapper>
         <Text variant="headlineMedium">Could not find game</Text>
@@ -84,7 +85,10 @@ function GameLobbyView({
     );
   }
 
-  const game = data.game;
+  setInterval(async () => {
+    await refetch();
+  }, 1000);
+  const game = gameData.game;
 
   return (
     <Wrapper shouldCenterVertically={false}>
@@ -96,7 +100,10 @@ function GameLobbyView({
         <Card.Title title="Users In Game:" />
         <Card.Content>
           <UsersInGameChips users={game.usersInGame} />
-          <GameSettingsView gameSettings={game.gameSettings} />
+          <GameSettingsView
+            gameSettings={gameData.game.gameSettings}
+            key={JSON.stringify(gameData.game.gameSettings)}
+          />
         </Card.Content>
       </Card>
     </Wrapper>
@@ -119,6 +126,7 @@ const UPDATE_SETTINGS = graphql(
 );
 
 function GameSettingsView({ gameSettings }: { gameSettings: GameSettings }) {
+  console.log("doing render");
   const [ladyOfLake, setLadyOfLake] = useState(gameSettings.ladyOfLake);
   const [mordred, setMordred] = useState(gameSettings.mordred);
   const [oberon, setOberon] = useState(gameSettings.oberon);

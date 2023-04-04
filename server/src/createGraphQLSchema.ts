@@ -7,6 +7,7 @@ async function createGraphQLSchema() {
   return await buildSchema({
     resolvers: [GameResolver],
     container: Container,
+    
   });
 }
 export { createGraphQLSchema };

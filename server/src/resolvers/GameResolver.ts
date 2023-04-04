@@ -2,12 +2,17 @@ import {
   Arg,
   Authorized,
   Ctx,
+  Field,
   FieldResolver,
   Mutation,
+  ObjectType,
+  PubSub,
+  PubSubEngine,
   Query,
   Resolver,
   ResolverInterface,
   Root,
+  Subscription,
 } from "type-graphql";
 import { Service } from "typedi";
 
@@ -17,6 +22,12 @@ import { User } from "../entity/User";
 import { ResolverContext } from "../index";
 import { GameService } from "../services/GameService";
 import { GameSettingsService } from "../services/GameSettingsService";
+
+@ObjectType()
+class GameChangePayload {
+  @Field()
+  change: boolean = false;
+}
 
 @Service()
 @Resolver(Game)
@@ -67,7 +78,8 @@ class GameResolver implements ResolverInterface<Game> {
   @Mutation(() => GameSettings)
   async updateGameSettings(
     @Arg("gameSettingsInput") newSettings: GameSettings,
-    @Ctx() ctx: ResolverContext
+    @Ctx() ctx: ResolverContext,
+    @PubSub() pubSub: PubSubEngine
   ) {
     if (!ctx.user) {
       throw Error("You must be logged in to edit a game.");
@@ -75,7 +87,17 @@ class GameResolver implements ResolverInterface<Game> {
 
     // TODO: Check user is owner of game before allowing them to update the settings
 
-    return await this.gameSettingsService.setGameSettings(newSettings);
+    const output = await this.gameSettingsService.setGameSettings(newSettings);
+    // const payload: Game | undefined = await this.game(output.gameId, ctx);
+    await pubSub.publish("GAME_CHANGE", { change: true });
+
+    return output;
+  }
+
+  @Subscription(() => GameChangePayload, { topics: "GAME_CHANGE" })
+  gameChange(@Root() gameChangePayload: GameChangePayload): GameChangePayload {
+    console.log(gameChangePayload);
+    return new GameChangePayload();
   }
 }
 

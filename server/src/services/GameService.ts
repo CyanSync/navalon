@@ -95,8 +95,7 @@ class GameService {
     const alreadyInGame = await this.dbProvider.db
       .selectFrom("game_users")
       .where("game_users.game", "=", gameId)
-      .where("game_users.user", "=", userId)
-      .select("id")
+      .where("game_users.user", "=", userId) .select("id")
       .execute();
 
     if (alreadyInGame.length !== 0) {
