@@ -33,9 +33,9 @@ import { useServer } from "graphql-ws/lib/use/ws";
 const PORT = 4000;
 
 const verifier = CognitoJwtVerifier.create({
-  userPoolId: "us-east-2_WHIGoYP3n",
+  userPoolId: "us-east-2_RrxCZ2TGR",
   tokenUse: "id",
-  clientId: ["ir15j2df7lc1apu83nvcbtbnk", "27qlrc2c6prp1c2tfl0pdbqgfu"],
+  clientId: ["ir15j2df7lc1apu83nvcbtbnk", "27qlrc2c6prp1c2tfl0pdbqgfu", "7jrjk2iug6mj2bpo4jvfmilca7"],
 });
 
 export interface ResolverContext {
@@ -99,12 +99,15 @@ async function startServer() {
         try {
           const payload = await verifier.verify(token);
           const name = payload.given_name + " " + payload.family_name;
+          // console.log("payload is ", payload)
           const email = payload.email as string;
           userInfo = { name, email };
         } catch (e) {
           userInfo = { name: "Test User", email: "test@example.com" };
-          // console.log("Set user to test user!");
+          console.log("Set user to test user!");
+          console.log("error is", e)
         }
+        console.log("user info is!", userInfo)
 
         const userService = Container.get(UserService);
         const user = await userService.getUserByEmailOrCreate(userInfo.email, userInfo.name);

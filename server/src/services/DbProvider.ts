@@ -38,7 +38,7 @@ class DbProvider {
       log: LOG ? console.log : undefined,
     });
 
-    // this.runMigrations();
+    this.runMigrations();
   }
   getMigrator() {
     return new Migrator({

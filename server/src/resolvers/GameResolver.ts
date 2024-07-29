@@ -31,7 +31,7 @@ class GameResolver implements ResolverInterface<Game> {
 
   @Query(() => [Game])
   games(@Ctx() ctx: ResolverContext) {
-    console.log("getting games");
+    // console.log("getting games");
     return this.gameService.getGames();
   }
 

@@ -22,7 +22,8 @@ import { GameLobbyView } from "./src/components/GameLobbyView";
 import { CreateNewButton, GameSelectorView } from "./src/components/GameSelectorView";
 import { useAuthentication } from "./src/utils/getUserHook";
 
-const URI = "192.168.1.116:4000";
+// const URI = "192.168.1.116:4000";
+const URI = "localhost:4000";
 // Initialize Apollo Client
 const httpLink = createHttpLink({
   // uri: "http://192.168.1.120:4000",

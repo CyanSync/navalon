@@ -17,5 +17,23 @@
         "client5b7e6ec5": {}
       }
     }
+  },
+  "navalon": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-client-navalon-17e26-authRole",
+      "UnauthRoleArn": "arn:aws:iam::776637943660:role/amplify-client-navalon-17e26-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::776637943660:role/amplify-client-navalon-17e26-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-client-navalon-17e26-deployment",
+      "UnauthRoleName": "amplify-client-navalon-17e26-unauthRole",
+      "StackName": "amplify-client-navalon-17e26",
+      "StackId": "arn:aws:cloudformation:us-east-2:776637943660:stack/amplify-client-navalon-17e26/dfeae060-4d4c-11ef-9699-0634fa50686d",
+      "AmplifyAppId": "dzomg6y4oojgb"
+    },
+    "categories": {
+      "auth": {
+        "client5b7e6ec5": {}
+      }
+    }
   }
 }
